@@ -1,4 +1,29 @@
 #include <iostream>
+#include <string>
+#include <vector>
+
+enum class OrderBookType{bid, ask};
+
+class OrderBookEntry {
+    public:
+
+        OrderBookEntry( double _price,
+                        double _amount,
+                        std::string _timestamp,
+                        std::string _product,
+                        OrderBookType _orderType) :
+            price(_price),
+            amount(_amount),
+            timestamp(_timestamp),
+            product(_product),
+            orderType(_orderType) {}
+
+        double price;
+        double amount;
+        std::string timestamp;
+        std::string product;
+        OrderBookType orderType;
+};
 
 void printMenu() {
     std::cout << "1: Print help " << std::endl;
@@ -77,12 +102,20 @@ void processUserOption(int userOption) {
 
 int main() {
 
+    /*
     while(true)
     {
         printMenu();
         int userOption = getUserOption();
         processUserOption(userOption);
-    }   
+    }
+    */   
+
+    std::vector<OrderBookEntry> orders;
+    orders.push_back(OrderBookEntry{5319.450228, 0.00020075, "2020/03/17 17:01:24.884492", "BTC/USDT", OrderBookType::bid});
+
+    
+    std::cout << "The price is: " << orders[0].price << std::endl;
 
     return 0;
 }
