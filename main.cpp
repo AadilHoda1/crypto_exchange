@@ -4,6 +4,7 @@
 
 #include "OrderBookEntry.h"
 #include "CryptoMain.h"
+#include "CSVReader.h"
 
 int main() {
     

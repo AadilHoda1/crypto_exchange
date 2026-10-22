@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "CryptoMain.h"
+#include "CSVReader.h"
 
 CryptoMain::CryptoMain() {}
 
@@ -17,7 +18,7 @@ void CryptoMain::init() {
 }
 
 void CryptoMain::loadOrderBook() {
-     orders.push_back(OrderBookEntry{5319.450228, 0.00020075, "2020/03/17 17:01:24.884492", "BTC/USDT", OrderBookType::bid});
+    orders = CSVReader::readCSV("20200317.csv");
 }
 
 void CryptoMain::printMenu() {
