@@ -6,19 +6,14 @@
 CryptoMain::CryptoMain() {}
 
 void CryptoMain::init() {
-    loadOrderBook();
-
     int input;
+    currentTime = orderBook.getEarliestTime();
 
     while(true) {
         printMenu();
         input = getUserOption();
         processUserOption(input);
     }
-}
-
-void CryptoMain::loadOrderBook() {
-    orders = CSVReader::readCSV("20200317.csv");
 }
 
 void CryptoMain::printMenu() {
@@ -28,6 +23,8 @@ void CryptoMain::printMenu() {
     std::cout << "4: Place a bid " << std::endl;
     std::cout << "5: Print wallet " << std::endl;
     std::cout << "6: Continue " << std::endl;
+
+    std::cout << "Current Time is: " << currentTime << std::endl;
 }
 
 void CryptoMain::printHelp() {
@@ -35,7 +32,15 @@ void CryptoMain::printHelp() {
 }
 
 void CryptoMain::printMarketStats() {
-    std::cout << "We have loaded: " << orders.size() << " entries." << std::endl;
+    for(const std::string p: orderBook.getKnownProducts()) {
+        std::cout << "Product: " << p << std::endl;
+
+        std::vector<OrderBookEntry> entries = orderBook.getOrders(OrderBookType::ask, p, currentTime);
+        std::cout << "Ask seen: " << entries.size() << std::endl;
+        std::cout << "Ask max: " << OrderBook::getHighPrice(entries) << std::endl;
+        std::cout << "Ask min: " << OrderBook::getLowPrice(entries) << std::endl;
+    }
+    //std::cout << "We have loaded: " << orders.size() << " entries." << std::endl;
 }
 
 void CryptoMain::enterOffer() {
@@ -52,6 +57,7 @@ void CryptoMain::printWallet() {
 
 void CryptoMain::gotoNextTimeFrame() {
     std::cout << "Going to next time frame." << std::endl;
+    currentTime = orderBook.getNextTime(currentTime);
 }
 
 int CryptoMain::getUserOption() {

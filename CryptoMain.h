@@ -1,6 +1,7 @@
 #pragma once
 
 #include "OrderBookEntry.h"
+#include "OrderBook.h"
 
 class CryptoMain {
     public:
@@ -8,7 +9,6 @@ class CryptoMain {
         void init();
 
     private:
-        void loadOrderBook();
         void printMenu();
         void printHelp();
         void printMarketStats();
@@ -19,5 +19,6 @@ class CryptoMain {
         int getUserOption(); 
         void processUserOption(int userOption);
 
-        std::vector<OrderBookEntry> orders;
+        std::string currentTime;
+        OrderBook orderBook{"20200317.csv"};
 };
