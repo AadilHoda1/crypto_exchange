@@ -43,8 +43,33 @@ void CryptoMain::printMarketStats() {
     //std::cout << "We have loaded: " << orders.size() << " entries." << std::endl;
 }
 
-void CryptoMain::enterOffer() {
-    std::cout << "Make an offer - enter the amount" << std::endl;
+void CryptoMain::enterAsk() {
+    std::cout << "Make an ask - enter the amount: product, price, amount, eg: ETH/BTC, 100, 0.1" << std::endl;
+    std::string input;
+    //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::getline(std::cin, input);
+
+    std::vector<std::string> tokens = CSVReader::tokenise(input, ',');
+
+    if(tokens.size() != 3) {
+        std::cout << "Bad input: " << input << std::endl;
+    }
+    else {
+        try
+        {
+            OrderBookEntry obe = CSVReader::stringstoOBE(tokens[1], tokens[2], currentTime, tokens[0], OrderBookType::ask);
+            orderBook.insertOrder(obe);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            std::cout << "CryptoMain::enterAsk Bad input" << std::endl;
+        }
+        
+    }
+
+    std::cout << "You typed: " << input << std::endl;
 }
 
 void CryptoMain::enterBid() {
@@ -57,14 +82,30 @@ void CryptoMain::printWallet() {
 
 void CryptoMain::gotoNextTimeFrame() {
     std::cout << "Going to next time frame." << std::endl;
+    std::vector<OrderBookEntry> sales = orderBook.matchAsksToBids("ETH/BTC", currentTime);
+    std::cout << "Sales: " << sales.size() << std::endl;
+    for(OrderBookEntry& sale: sales) {
+        std::cout << "Sale price: " << sale.price << ", amount: " << sale.amount << std::endl;
+    }
     currentTime = orderBook.getNextTime(currentTime);
 }
 
 int CryptoMain::getUserOption() {
-    int userOption;
+    int userOption = 0;
 
+    std::string line;
+    std::getline(std::cin, line);
     std::cout << "Type in 1-6" << std::endl;
-    std::cin >> userOption;
+
+    try
+    {
+        userOption = std::stoi(line);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+
     std::cout << "You chose: " << userOption << std::endl;
     return userOption; 
 }   
@@ -86,7 +127,7 @@ void CryptoMain::processUserOption(int userOption) {
     }
     if (userOption == 3)
     {
-        enterOffer();
+        enterAsk();
     }
     if (userOption == 4)
     {
