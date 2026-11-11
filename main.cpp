@@ -5,11 +5,22 @@
 #include "OrderBookEntry.h"
 #include "CryptoMain.h"
 #include "CSVReader.h"
+#include "Wallet.h"
 
 int main() {
     
     CryptoMain app{};
     app.init();
+
+    /*
+    Wallet wallet;
+    wallet.insertCurrency("BTC", 10);
+    wallet.insertCurrency("USDT", 1000);
+    std::cout << "Wallet has BTC " << wallet.containsCurrency("USDT", 10) << std::endl;
+    std::cout << wallet.toString() << std::endl;
+    wallet.removeCurrency("USDT", 100);
+    std::cout << wallet.toString() << std::endl;
+    */
 
     return 0;
 }

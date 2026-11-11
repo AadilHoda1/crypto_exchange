@@ -9,6 +9,8 @@ void CryptoMain::init() {
     int input;
     currentTime = orderBook.getEarliestTime();
 
+    wallet.insertCurrency("BTC", 10);
+
     while(true) {
         printMenu();
         input = getUserOption();
@@ -46,20 +48,25 @@ void CryptoMain::printMarketStats() {
 void CryptoMain::enterAsk() {
     std::cout << "Make an ask - enter the amount: product, price, amount, eg: ETH/BTC, 100, 0.1" << std::endl;
     std::string input;
-    //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
     std::getline(std::cin, input);
 
     std::vector<std::string> tokens = CSVReader::tokenise(input, ',');
 
     if(tokens.size() != 3) {
-        std::cout << "Bad input: " << input << std::endl;
+        std::cout << "CryptoMain::enterAsk Bad input: " << input << std::endl;
     }
     else {
         try
         {
             OrderBookEntry obe = CSVReader::stringstoOBE(tokens[1], tokens[2], currentTime, tokens[0], OrderBookType::ask);
-            orderBook.insertOrder(obe);
+            obe.username = "simuser";
+            if(wallet.canFulfillOrder(obe)) {
+                std::cout << "Wallet looks good." << std::endl;
+                orderBook.insertOrder(obe);
+            }
+            else {
+                std::cout << "Wallet has insufficient funds." << std::endl;
+            }
         }
         catch(const std::exception& e)
         {
@@ -68,16 +75,42 @@ void CryptoMain::enterAsk() {
         }
         
     }
-
-    std::cout << "You typed: " << input << std::endl;
 }
 
 void CryptoMain::enterBid() {
-    std::cout << "Make a bid - enter the amount" << std::endl;
+    std::cout << "Make a bid - enter the amount: product, price, amount, eg: ETH/BTC, 100, 0.1" << std::endl;
+    std::string input;
+    std::getline(std::cin, input);
+
+    std::vector<std::string> tokens = CSVReader::tokenise(input, ',');
+
+    if(tokens.size() != 3) {
+        std::cout << "CryptoMain::enterBid Bad input: " << input << std::endl;
+    }
+    else {
+        try
+        {
+            OrderBookEntry obe = CSVReader::stringstoOBE(tokens[1], tokens[2], currentTime, tokens[0], OrderBookType::bid);
+            obe.username = "simuser";
+            if(wallet.canFulfillOrder(obe)) {
+                std::cout << "Wallet looks good." << std::endl;
+                orderBook.insertOrder(obe);
+            }
+            else {
+                std::cout << "Wallet has insufficient funds." << std::endl;
+            }
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            std::cout << "CryptoMain::enterBid Bad input" << std::endl;
+        }
+        
+    }
 }
 
 void CryptoMain::printWallet() {
-    std::cout << "Your wallet is empty." << std::endl;
+    std::cout << wallet.toString() << std::endl;
 }
 
 void CryptoMain::gotoNextTimeFrame() {
@@ -86,6 +119,9 @@ void CryptoMain::gotoNextTimeFrame() {
     std::cout << "Sales: " << sales.size() << std::endl;
     for(OrderBookEntry& sale: sales) {
         std::cout << "Sale price: " << sale.price << ", amount: " << sale.amount << std::endl;
+        if(sale.username == "simuser") {
+            wallet.processSale(sale);
+        }
     }
     currentTime = orderBook.getNextTime(currentTime);
 }

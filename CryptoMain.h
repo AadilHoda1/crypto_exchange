@@ -2,6 +2,7 @@
 
 #include "OrderBookEntry.h"
 #include "OrderBook.h"
+#include "Wallet.h"
 
 class CryptoMain {
     public:
@@ -20,5 +21,6 @@ class CryptoMain {
         void processUserOption(int userOption);
 
         std::string currentTime;
-        OrderBook orderBook{"test.csv"};
+        OrderBook orderBook{"20200317.csv"};
+        Wallet wallet;
 };
