@@ -1,8 +1,9 @@
 Crypto Trading Platform
 
 Compiling(C++11 or newer):
-g++ *.cpp
-./a.out
+1) g++ *.cpp
+2) ./a.out
+
 
 Example
 1: Print help 
@@ -14,6 +15,7 @@ Example
 Current Time is: 2020/03/17 17:01:24.884492
 2
 Type in 1-6
+
 You chose: 2
 Product: BTC/USDT
 Ask seen: 50
@@ -44,6 +46,7 @@ Ask min: 117.329
 Current Time is: 2020/03/17 17:01:24.884492
 5
 Type in 1-6
+
 You chose: 5
 BTC : 10.000000
 
@@ -56,6 +59,7 @@ BTC : 10.000000
 Current Time is: 2020/03/17 17:01:24.884492
 4
 Type in 1-6
+
 You chose: 4
 Make a bid - enter the amount: product, price, amount, eg: ETH/BTC, 100, 0.1
 ETH/BTC, 1, 1
@@ -70,6 +74,7 @@ Wallet looks good.
 Current Time is: 2020/03/17 17:01:24.884492
 6
 Type in 1-6
+
 You chose: 6
 Going to next time frame.
 Sales: 1
@@ -83,6 +88,7 @@ Sale price: 0.0218909, amount: 1
 Current Time is: 2020/03/17 17:01:30.099017
 5
 Type in 1-6
+
 You chose: 5
 BTC : 9.978109
 ETH : 1.000000
